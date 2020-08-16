@@ -13,8 +13,7 @@ type RegisterQueueRequest struct {
 	BindingID     uint   `json:"binding_id"`
 }
 
-// RegisterQueue ...
-func createQueue(data []byte, queueList map[uint]*queue.Queue) error {
+func (server *Server) createQueue(data []byte) error {
 	request := &RegisterQueueRequest{}
 
 	err := json.Unmarshal(data, request)
@@ -24,7 +23,7 @@ func createQueue(data []byte, queueList map[uint]*queue.Queue) error {
 
 	newQueueToRegister := queue.NewQueue(request.Name)
 
-	queueList[uint(len(queueList))] = newQueueToRegister
+	server.queueList[uint(len(server.queueList))] = newQueueToRegister
 
 	return nil
 

@@ -30,6 +30,15 @@ func NewAdapter() *Adapter {
 	}
 }
 
+// AddQueue ...
+func (ad *Adapter) AddQueue(queue *queue.Queue) error {
+	if queue != nil {
+		ad.QueueList[uint(len(ad.QueueList))] = queue
+	}
+
+	return errQueueIsEmpty
+}
+
 // ResolveData ...
 func (ad *Adapter) ResolveData(data string) error {
 	type resolveInfoStruct struct {
@@ -45,14 +54,19 @@ func (ad *Adapter) ResolveData(data string) error {
 
 	if ad.Type == DIRECT {
 		neededQueue := ad.QueueList[resolveInfoStructInstance.RoutingID]
+		if neededQueue != nil {
+			neededQueue.WriteInto(resolveInfoStructInstance.Data)
+		}
 
-		neededQueue.WriteInto(resolveInfoStructInstance.Data)
 	} else if ad.Type == FANOUT {
 		neededQueues := ad.QueueList
 
-		for _, queue := range neededQueues {
-			queue.WriteInto(resolveInfoStructInstance.Data)
+		if len(neededQueues) != 0 {
+			for _, queue := range neededQueues {
+				queue.WriteInto(resolveInfoStructInstance.Data)
+			}
 		}
+
 	}
 
 	return nil

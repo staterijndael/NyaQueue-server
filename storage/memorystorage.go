@@ -4,8 +4,7 @@ import "sync"
 
 // TransportData ...
 type TransportData struct {
-	Info      interface{}
-	RoutingID uint
+	Info interface{}
 }
 
 // NewTransportData ...

@@ -1,5 +1,7 @@
 package server
 
-const (
-	creatingEndpointError = "error creating endpoint"
+import "errors"
+
+var (
+	errCreatingEndpoint = errors.New("error creating endpoint")
 )

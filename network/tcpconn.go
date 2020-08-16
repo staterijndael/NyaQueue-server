@@ -2,39 +2,45 @@ package network
 
 import (
 	"io"
-	"log"
 	"net"
+
+	"go.uber.org/zap"
 )
 
 // StartTCPServer ...
-func StartTCPServer(addr string) (net.Conn, error) {
+func StartTCPServer(addr string) (net.Listener, error) {
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
 		return nil, err
 	}
 
-	conn, err := ln.Accept()
-	if err != nil {
-		return nil, err
-	}
-	return conn, nil
+	return ln, nil
 
 }
 
 // ListenConn ...
-func ListenConn(conn net.Conn, sendDataChannel chan []byte) {
-	var readData []byte
+func ListenConn(ln net.Listener, logger *zap.Logger, sendDataChannel chan<- []byte) {
 	for {
-		localReadData := make([]byte, 1024)
-		_, err := conn.Read(localReadData)
+		conn, err := ln.Accept()
 		if err != nil {
-			if err == io.EOF {
-				readData = append(readData, localReadData...)
-				sendDataChannel <- readData
-				readData = []byte{}
-			}
-			log.Fatal(err)
+			logger.Error(err.Error())
 		}
-		readData = append(readData, localReadData...)
+
+		var readData []byte
+		for {
+			localReadData := make([]byte, 1024)
+
+			_, err = conn.Read(localReadData)
+			if err != nil {
+				if err == io.EOF {
+					readData = append(readData, localReadData...)
+					sendDataChannel <- readData
+					readData = []byte{}
+				}
+				logger.Error(err.Error())
+			}
+			readData = append(readData, localReadData...)
+		}
 	}
+
 }

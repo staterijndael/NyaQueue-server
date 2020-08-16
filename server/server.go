@@ -11,11 +11,12 @@ import (
 type Server struct {
 	ottyStruct *otty.Otty
 	queueList  map[uint]*queue.Queue
+	RoutingID  uint
 	logger     *zap.Logger
 }
 
-// New ...
-func New(logger *zap.Logger) *Server {
+// NewServer ...
+func NewServer(logger *zap.Logger) *Server {
 	return &Server{
 		ottyStruct: otty.New(),
 		logger:     logger,
@@ -23,7 +24,7 @@ func New(logger *zap.Logger) *Server {
 }
 
 // ListenDataChannel ...
-func (server *Server) ListenDataChannel(dataChannel chan []byte) {
+func (server *Server) ListenDataChannel(dataChannel <-chan []byte) {
 	for {
 		data := <-dataChannel
 		server.ottyStruct = otty.ParseOtty(data)
@@ -35,9 +36,9 @@ func (server *Server) ListenDataChannel(dataChannel chan []byte) {
 func (server *Server) CreateEndpoints() {
 
 	server.ottyStruct.CreateEndpoint("createQueue", func(data []byte) interface{} {
-		err := createQueue(data, server.queueList)
+		err := server.createQueue(data)
 		if err != nil {
-			server.logger.Panic(creatingEndpointError,
+			server.logger.Panic(errCreatingEndpoint.Error(),
 				zap.String("endpointName", "createQueue"),
 			)
 			return err
