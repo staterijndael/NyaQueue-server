@@ -1,6 +1,7 @@
 package server
 
 import (
+	"nyaqueue-server/adapter"
 	"nyaqueue-server/queue"
 
 	"github.com/Oringik/otty"
@@ -9,17 +10,20 @@ import (
 
 // Server ...
 type Server struct {
-	ottyStruct *otty.Otty
-	queueList  map[uint]*queue.Queue
-	RoutingID  uint
-	logger     *zap.Logger
+	ottyStruct  *otty.Otty
+	queueList   map[uint]*queue.Queue
+	adapterList map[uint]*adapter.Adapter
+	RoutingID   uint
+	logger      *zap.Logger
 }
 
 // NewServer ...
 func NewServer(logger *zap.Logger) *Server {
 	return &Server{
-		ottyStruct: otty.New(),
-		logger:     logger,
+		ottyStruct:  otty.New(),
+		logger:      logger,
+		queueList:   make(map[uint]*queue.Queue),
+		adapterList: make(map[uint]*adapter.Adapter),
 	}
 }
 
@@ -27,7 +31,7 @@ func NewServer(logger *zap.Logger) *Server {
 func (server *Server) ListenDataChannel(dataChannel <-chan []byte) {
 	for {
 		data := <-dataChannel
-		server.ottyStruct = otty.ParseOtty(data)
+		server.ottyStruct.ParseOtty(data)
 		server.ottyStruct.ResolveEndpoint(server.ottyStruct.Route().GetValue(), server.ottyStruct.Data().GetValue())
 	}
 }
@@ -35,16 +39,15 @@ func (server *Server) ListenDataChannel(dataChannel <-chan []byte) {
 // CreateEndpoints ...
 func (server *Server) CreateEndpoints() {
 
-	server.ottyStruct.CreateEndpoint("createQueue", func(data []byte) interface{} {
+	server.ottyStruct.CreateEndpoint("createQueue", func(data []byte) {
 		err := server.createQueue(data)
 		if err != nil {
-			server.logger.Panic(errCreatingEndpoint.Error(),
+			server.logger.Panic(err.Error(),
 				zap.String("endpointName", "createQueue"),
 			)
-			return err
 		}
 
-		return nil
+		return
 	})
 
 }

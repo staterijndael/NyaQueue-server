@@ -1,6 +1,12 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Oringik/otty v0.0.0-20200803170124-cb7f491852e3 h1:buWlSRCeN48FAIawbJv+LKx+x5Wr3wMnhHb9MhzArnc=
-github.com/Oringik/otty v0.0.0-20200803170124-cb7f491852e3/go.mod h1:FjUM+934nDf0HU3TyeeBTa/pt5Dm2Ej7PDIx6bDIi2c=
+github.com/Oringik/otty v0.0.0-20200816185713-40e291781c25 h1:JGXyNBcBZw9y+R6FQsadlznPClXO6DHShu+vQNWzIZA=
+github.com/Oringik/otty v0.0.0-20200816185713-40e291781c25/go.mod h1:FjUM+934nDf0HU3TyeeBTa/pt5Dm2Ej7PDIx6bDIi2c=
+github.com/Oringik/otty v0.0.0-20200816190521-759a5691719c h1:zkS1UZqujdRZx98cvXjchqIDTHgmq2o1hbdxAPxmaXg=
+github.com/Oringik/otty v0.0.0-20200816190521-759a5691719c/go.mod h1:FjUM+934nDf0HU3TyeeBTa/pt5Dm2Ej7PDIx6bDIi2c=
+github.com/Oringik/otty v0.0.0-20200816201138-fe31780681f3 h1:a18IeT4cwBMjFWsX7WxWinGgLZZlcE+VSww4VRMf8i0=
+github.com/Oringik/otty v0.0.0-20200816201138-fe31780681f3/go.mod h1:FjUM+934nDf0HU3TyeeBTa/pt5Dm2Ej7PDIx6bDIi2c=
+github.com/Oringik/otty v0.0.0-20200817100228-6ec3ff3f197d h1:uOKg03Gc6hc2tllXY6QTG8hadeBQA6KxCgDM4J/8U+o=
+github.com/Oringik/otty v0.0.0-20200817100228-6ec3ff3f197d/go.mod h1:FjUM+934nDf0HU3TyeeBTa/pt5Dm2Ej7PDIx6bDIi2c=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=

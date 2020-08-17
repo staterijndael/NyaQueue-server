@@ -7,6 +7,7 @@ import (
 
 // Queue ...
 type Queue struct {
+	ID            uint
 	Name          string
 	isAckAdapter  bool
 	isAckProducer bool
@@ -16,10 +17,14 @@ type Queue struct {
 }
 
 // NewQueue ...
-func NewQueue(name string) *Queue {
+func NewQueue(id uint, name string, isAckAd bool, isAckPr bool, bindingID uint) *Queue {
 	return &Queue{
-		Name:    "",
-		Storage: storage.NewMemStore(),
+		ID:            id,
+		Name:          name,
+		isAckAdapter:  isAckAd,
+		isAckProducer: isAckPr,
+		BindingID:     bindingID,
+		Storage:       storage.NewMemStore(),
 	}
 }
 

@@ -2,15 +2,15 @@ package server
 
 import (
 	"encoding/json"
+	"nyaqueue-server/adapter"
 	"nyaqueue-server/queue"
 )
 
 // RegisterQueueRequest ...
 type RegisterQueueRequest struct {
 	Name          string `json:"name"`
-	isAckAdapter  bool   `json:"ack_adapter"`
-	isAckProducer bool   `json:"ack_producer"`
-	BindingID     uint   `json:"binding_id"`
+	IsAckAdapter  bool   `json:"ack_adapter"`
+	IsAckProducer bool   `json:"ack_producer"`
 }
 
 func (server *Server) createQueue(data []byte) error {
@@ -21,9 +21,23 @@ func (server *Server) createQueue(data []byte) error {
 		return err
 	}
 
-	newQueueToRegister := queue.NewQueue(request.Name)
+	// Register new Queue
 
-	server.queueList[uint(len(server.queueList))] = newQueueToRegister
+	queueID := uint(len(server.queueList))
+
+	newQueueToRegister := queue.NewQueue(queueID, request.Name, request.IsAckAdapter, request.IsAckProducer, uint(len(server.queueList)))
+
+	server.queueList[queueID] = newQueueToRegister
+
+	// Register new adapter for attach to queue
+
+	adapterID := uint(len(server.adapterList))
+
+	newAdapterToRegister := adapter.NewAdapter(adapterID, request.Name+"Adapter")
+
+	server.adapterList[adapterID] = newAdapterToRegister
+
+	newAdapterToRegister.QueueList[queueID] = newQueueToRegister
 
 	return nil
 

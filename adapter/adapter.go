@@ -16,15 +16,16 @@ const (
 
 // Adapter ...
 type Adapter struct {
+	ID        uint
 	Name      string
 	QueueList map[uint]*queue.Queue
 	Type      adapterType
 }
 
 // NewAdapter ...
-func NewAdapter() *Adapter {
+func NewAdapter(id uint, name string) *Adapter {
 	return &Adapter{
-		Name:      "",
+		Name:      name,
 		QueueList: map[uint]*queue.Queue{},
 		Type:      DIRECT,
 	}

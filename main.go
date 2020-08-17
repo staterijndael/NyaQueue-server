@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"nyaqueue-server/network"
 	"nyaqueue-server/server"
@@ -12,28 +11,29 @@ import (
 )
 
 func main() {
+	startTime := time.Now().UnixNano()
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	startTime := time.Now().UnixNano()
-
-	ln, err := network.StartTCPServer("127.0.0.1:12000")
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	logger, err := zap.NewProduction()
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Fatal(err)
 		return
 	}
 	defer logger.Sync()
+
+	ln, err := network.StartTCPServer("127.0.0.1:12000")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
 	listenChannel := make(chan []byte)
 
 	go network.ListenConn(ln, logger, listenChannel)
 
 	server := server.NewServer(logger)
+
+	server.CreateEndpoints()
 
 	logger.Info("Server successfully started",
 		zap.Int64("Duration", time.Now().UnixNano()-startTime),

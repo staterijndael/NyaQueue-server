@@ -28,6 +28,7 @@ func ListenConn(ln net.Listener, logger *zap.Logger, sendDataChannel chan<- []by
 
 		var readData []byte
 		for {
+
 			localReadData := make([]byte, 1024)
 
 			_, err = conn.Read(localReadData)
@@ -36,6 +37,7 @@ func ListenConn(ln net.Listener, logger *zap.Logger, sendDataChannel chan<- []by
 					readData = append(readData, localReadData...)
 					sendDataChannel <- readData
 					readData = []byte{}
+					break
 				}
 				logger.Error(err.Error())
 			}
